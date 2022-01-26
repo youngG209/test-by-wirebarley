@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>환율 계산</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<input type="hidden" id="exchangeValue"/>
+<h1>환율 계산</h1>
+<p>송금국가: 미국(USD)</p>
+<p>
+    수취국가:
+    <select id="country" onchange="fn_change()">
+        <option th:value="''" th:text="'선택'" selected/>
+        <option th:value="'KRW'" th:text="'한국(KRW)'"/>
+        <option th:value="'JPY'" th:text="'일본(JPY)'"/>
+        <option th:value="'PHP'" th:text="'필리핀(PHP)'"/>
+    </select>
+</p>
+<p>
+    환율: <span id="exchangeText"></span>
+</p>
+<p>송금액: <input type="text" id="sendAmount">USD</p>
+
+<button type="button" onclick="fn_submit()">Submit</button>
+<p id="totalAmount"></p>
+</body>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script>
+    function fn_change() {
+        let selectCountry = document.getElementById("country")
+        let countryOption = selectCountry.options[selectCountry.selectedIndex].value;
+        console.log(countryOption.length);
+
+        if (countryOption.length > 0) {
+            $.ajax({
+                url: "/exchange/country/" + countryOption,
+                type: "get",
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    let exchangeValue;
+                    let currency;
+                    if (countryOption == "KRW") {
+                        exchangeValue = data.data.quotes.USDKRW;
+                        currency = " USD/KRW"
+                    } else if (countryOption == "JPY") {
+                        exchangeValue = data.data.quotes.USDJPY;
+                        currency = " USD/JPY"
+                    } else if (countryOption == "PHP") {
+                        exchangeValue = data.data.quotes.USDPHP;
+                        currency = " USD/PHP"
+                    }
+                    document.getElementById("exchangeValue").value = exchangeValue;
+                    document.getElementById("exchangeText").innerText = exchangeValue + currency;
+                },
+                error: function (error, status, msg) {
+                    alert("상태코드 " + status + "에러메시지" + msg);
+                },
+            });
+        }else {
+            document.getElementById("exchangeValue").value = "";
+            document.getElementById("exchangeText").innerText = "";
+        }
+    }
+
+    function fn_submit() {
+        let selectCountry = document.getElementById("country")
+        let countryOption = selectCountry.options[selectCountry.selectedIndex].value;
+        let sendAmount = document.getElementById("sendAmount").value;
+        let exchangeValue = document.getElementById("exchangeValue").value;
+        console.log(countryOption);
+        console.log(sendAmount);
+        console.log(exchangeValue);
+
+        $.ajax({
+            url: "/exchange/calculation",
+            type: "post",
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify({
+                countryOption: countryOption,
+                sendAmount: sendAmount,
+                exchangeValue: exchangeValue
+            }),
+            success: function (data) {
+                console.log(data);
+                document.getElementById("totalAmount").innerText = data.data;
+            },
+            error: function (xhr, status, error) {
+                document.getElementById("totalAmount").innerText = "";
+                alert(xhr.responseJSON.error.message);
+            }
+        });
+    }
+</script>
+</html>
