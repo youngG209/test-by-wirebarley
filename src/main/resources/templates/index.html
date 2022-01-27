@@ -33,7 +33,6 @@
     function fn_change() {
         let selectCountry = document.getElementById("country")
         let countryOption = selectCountry.options[selectCountry.selectedIndex].value;
-        console.log(countryOption.length);
 
         if (countryOption.length > 0) {
             $.ajax({
@@ -42,16 +41,13 @@
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function (data) {
-                    let exchangeValue;
+                    let exchangeValue = data.data;
                     let currency;
                     if (countryOption == "KRW") {
-                        exchangeValue = data.data.quotes.USDKRW;
                         currency = " USD/KRW"
                     } else if (countryOption == "JPY") {
-                        exchangeValue = data.data.quotes.USDJPY;
                         currency = " USD/JPY"
                     } else if (countryOption == "PHP") {
-                        exchangeValue = data.data.quotes.USDPHP;
                         currency = " USD/PHP"
                     }
                     document.getElementById("exchangeValue").value = exchangeValue;
@@ -72,9 +68,6 @@
         let countryOption = selectCountry.options[selectCountry.selectedIndex].value;
         let sendAmount = document.getElementById("sendAmount").value;
         let exchangeValue = document.getElementById("exchangeValue").value;
-        console.log(countryOption);
-        console.log(sendAmount);
-        console.log(exchangeValue);
 
         $.ajax({
             url: "/exchange/calculation",
@@ -87,7 +80,6 @@
                 exchangeValue: exchangeValue
             }),
             success: function (data) {
-                console.log(data);
                 document.getElementById("totalAmount").innerText = data.data;
             },
             error: function (xhr, status, error) {

@@ -1,4 +1,4 @@
-package com.testbywirebarley.api;
+package com.testbywirebarley.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
 class CurrencylayerApiClientTest {
 
     private final String ACCESS_KEY = "066d66550637011e21dbb3afa759689c";
-    private final String currencylayerApiUrl = "http://api.currencylayer.com/live";
 
     @Test
     void getExchangeRate() throws JsonProcessingException {
+        String currencylayerApiUrl = "http://api.currencylayer.com/live";
         WebClient webClient = WebClient.builder().baseUrl(currencylayerApiUrl).build();
         String block = webClient.get()
                 .uri(uriBuilder -> uriBuilder

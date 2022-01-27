@@ -1,38 +1,36 @@
 package com.testbywirebarley.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.testbywirebarley.util.ConvertNumber;
+import lombok.Builder;
 
 public class ExchangeRate {
 
-    private ConvertNumber convertNumber = new ConvertNumber();
-
     @JsonProperty("USDKRW")
-    private String usdkrw;
+    private double usdkrw;
     @JsonProperty("USDJPY")
-    private String usdjpy;
+    private double usdjpy;
     @JsonProperty("USDPHP")
-    private String usdphp;
+    private double usdphp;
 
     public ExchangeRate() {
     }
 
-    public ExchangeRate(String usdkrw, String usdjpy, String usdphp) {
+    public ExchangeRate(double usdkrw, double usdjpy, double usdphp) {
         this.usdkrw = usdkrw;
         this.usdjpy = usdjpy;
         this.usdphp = usdphp;
     }
 
-    public String getUsdkrw() {
-        return convertNumber.convertNumberFormat(usdkrw);
+    public double getUsdkrw() {
+        return usdkrw;
     }
 
-    public String getUsdjpy() {
-        return convertNumber.convertNumberFormat(usdjpy);
+    public double getUsdjpy() {
+        return usdjpy;
     }
 
-    public String getUsdphp() {
-        return convertNumber.convertNumberFormat(usdphp);
+    public double getUsdphp() {
+        return usdphp;
     }
 
     @Override

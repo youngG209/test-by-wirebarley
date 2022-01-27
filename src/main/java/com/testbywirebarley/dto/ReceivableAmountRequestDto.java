@@ -1,19 +1,18 @@
-package com.testbywirebarley.model;
+package com.testbywirebarley.dto;
 
-import com.testbywirebarley.util.ConvertNumber;
 import lombok.Builder;
 
-public class ReceivableAmount {
+public class ReceivableAmountRequestDto {
 
-    private String countryOption;
-    private int sendAmount;
-    private String exchangeValue;
+    private final String countryOption;
+    private final String sendAmount;
+    private final String exchangeValue;
 
     public String getCountryOption() {
         return countryOption;
     }
 
-    public int getSendAmount() {
+    public String getSendAmount() {
         return sendAmount;
     }
 
@@ -22,7 +21,7 @@ public class ReceivableAmount {
     }
 
     @Builder
-    public ReceivableAmount(String countryOption, int sendAmount, String exchangeValue) {
+    public ReceivableAmountRequestDto(String countryOption, String sendAmount, String exchangeValue) {
         this.countryOption = countryOption;
         this.sendAmount = sendAmount;
         this.exchangeValue = exchangeValue;
