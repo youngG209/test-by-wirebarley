@@ -28,8 +28,6 @@ class CurrencylayerApiClientTest {
                 )
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new IllegalArgumentException("4xx")))
-                .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new IllegalArgumentException("5xx")))
                 .bodyToMono(String.class).block();//                .toEntity(ExchangeRateDto.class).block()
 
         ObjectMapper objectMapper = new ObjectMapper();
