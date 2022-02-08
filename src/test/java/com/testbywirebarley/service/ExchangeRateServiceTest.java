@@ -37,7 +37,7 @@ class ExchangeRateServiceTest {
         ReceivableAmountRequestDto receivableAmount = ReceivableAmountRequestDto
                 .builder()
                 .exchangeValue("KRW")
-                .sendAmount("1,100.00")
+                .sendAmount("1,000.00")
                 .exchangeValue("1,200.10")
                 .build();
         double sendAmount = convertStringToDouble(receivableAmount.getSendAmount());
@@ -46,7 +46,7 @@ class ExchangeRateServiceTest {
         double receivableTotalAmount = getReceivableTotalAmount(sendAmount, exchangeRate);
         String totalAmountFormat = convertNumberFormat(receivableTotalAmount);
 
-        assertThat(totalAmountFormat).isEqualTo("120,010.00");
+        assertThat(totalAmountFormat).isEqualTo("1,200,100.00");
     }
 
     @Test
