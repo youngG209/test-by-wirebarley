@@ -12,15 +12,14 @@ import reactor.core.publisher.Mono;
 
 class CurrencylayerApiClientTest {
 
-    private static final String ACCESS_KEY = "066d66550637011e21dbb3afa759689c";
-
     @Test
     void getExchangeRate() throws JsonProcessingException {
+        String accessKey = "066d66550637011e21dbb3afa759689c";
         String currencylayerApiUrl = "http://api.currencylayer.com/live";
         WebClient webClient = WebClient.builder().baseUrl(currencylayerApiUrl).build();
         String block = webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .queryParam("access_key", ACCESS_KEY)
+                        .queryParam("access_key", accessKey)
                         .queryParam("currencies", "KRW")
                         .queryParam("source", "USD")
                         .queryParam("format", "1")
@@ -28,6 +27,8 @@ class CurrencylayerApiClientTest {
                 )
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, response -> Mono.error(new IllegalArgumentException("4xx")))
+                .onStatus(HttpStatus::is5xxServerError, response -> Mono.error(new IllegalArgumentException("5xx")))
                 .bodyToMono(String.class).block();//                .toEntity(ExchangeRateDto.class).block()
 
         ObjectMapper objectMapper = new ObjectMapper();
