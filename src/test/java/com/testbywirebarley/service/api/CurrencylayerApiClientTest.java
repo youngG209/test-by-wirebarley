@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 class CurrencylayerApiClientTest {
 
-    private final String ACCESS_KEY = "066d66550637011e21dbb3afa759689c";
+    private static final String ACCESS_KEY = "066d66550637011e21dbb3afa759689c";
 
     @Test
     void getExchangeRate() throws JsonProcessingException {
